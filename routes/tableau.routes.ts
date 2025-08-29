@@ -1,5 +1,6 @@
 import express from 'express';
-import { addFavoriteApiResponse, authTokenRefreshHandler, authTokenResponse, deleteFavoriteApiResponse, environmentProjectsResoponse, jwtTokenResponse, listFavoriteApiResponse, recentsResponse, thumbnailProxyResponse } from '../controllers';
+import cron from 'node-cron';
+import { addFavoriteApiResponse, authTokenRefreshHandler, authTokenResponse, deleteFavoriteApiResponse, environmentProjectsResoponse, jwtTokenResponse, listFavoriteApiResponse, recentsResponse, refreshTokenJob, thumbnailProxyResponse } from '../controllers';
 import { commonHeaders } from '../middleware';
 import { tableauSecrets } from '../services';
 
@@ -23,5 +24,9 @@ const router = express.Router();
     router.get('/auth-token/refresh', commonHeaders, authTokenRefreshHandler);
 })();
 
+cron.schedule("0 */3 * * *", async () => {
+  console.log("⏰ Running every 3 hours:", new Date().toISOString());
+  await refreshTokenJob();
+});
 
 export default router;

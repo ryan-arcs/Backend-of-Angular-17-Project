@@ -18,6 +18,23 @@ export const authTokenRefreshHandler = async (req: Request, res: Response) => {
   }
 }
 
+export const refreshTokenJob = async () => {
+  try {
+    const token = await refreshTableauAuthToken();
+
+    if (!token) {
+      console.error("❌ Failed to refresh Tableau token");
+      return null;
+    }
+
+    console.log("✅ Tableau token refreshed successfully at", new Date().toISOString());
+    return token;
+  } catch (error: any) {
+    console.error("🔥 Error refreshing Tableau token:", error?.message || error);
+    return null;
+  }
+};
+
 
 export const refreshTableauAuthToken = async (): Promise<string | null> => {
   try {
