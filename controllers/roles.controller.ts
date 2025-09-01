@@ -141,7 +141,7 @@ export const rolePermissionsHandler = async (req: Request, res: Response) => {
     const result = await managePermissions({
       roleId,
       assignedPermissions,
-      userId: Number(loggedInUserInfo?.id)
+      userId: loggedInUserInfo?.id
     });
 
     commmonResponse({
@@ -201,7 +201,7 @@ export const roleUsersHandler = async (req: Request, res: Response) => {
     const result = await manageUsers({
       roleId,
       assignedUsers,
-      userId: Number(loggedInUserInfo?.id)
+      userId: loggedInUserInfo?.id
     });
 
     commmonResponse({

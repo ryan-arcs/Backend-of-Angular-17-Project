@@ -34,7 +34,7 @@ export const managePermissions = async (req: ManagePermissionsRequest) => {
     [req.roleId, permissionIds, req.userId]
   );
 
-  return result.rows[0];
+  return result?.rows[0]?.assign_permissions_to_role;
 };
 
 export const permissionList = async (req: RolePermissionListRequest): Promise<{ data: RolePermission[]; totalCount: number }> => {
@@ -47,8 +47,7 @@ export const permissionList = async (req: RolePermissionListRequest): Promise<{ 
     `SELECT * FROM xapps.get_permissions_by_role_id($1);`,
     [req?.roleId]
   );
-  
-  return { data: result.rows, totalCount: Number(result?.rowCount)};
+  return { data: result.rows[0]?.get_permissions_by_role_id?.rows, totalCount: Number(result.rows[0]?.get_permissions_by_role_id?.totalCount) };
 };
 
 export const manageUsers = async (req: ManageUsersRequest) => {
@@ -71,7 +70,7 @@ export const manageUsers = async (req: ManageUsersRequest) => {
     [req.roleId, userIds, req.userId]
   );
 
-  return result.rows[0];
+  return result.rows[0]?.assign_users_to_role;
 };
 
 export const userList = async (req: RoleUserListRequest): Promise<{ data: User[]; totalCount: number }> => {
@@ -84,8 +83,7 @@ export const userList = async (req: RoleUserListRequest): Promise<{ data: User[]
     `SELECT * FROM xapps.get_users_by_role_id($1);`,
     [req?.roleId]
   );
-  
-  return { data: result.rows, totalCount: Number(result?.rowCount)};
+  return { data: result.rows[0]?.get_users_by_role_id?.rows, totalCount: Number(result.rows[0]?.get_users_by_role_id?.totalCount) };
 };
 
 export const createRole = async (params: CreateRoleParams) => {

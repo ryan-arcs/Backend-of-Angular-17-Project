@@ -108,8 +108,7 @@ export const manageRoles = async (req: ManageRolesRequest): Promise<boolean> => 
     );`,
     [req.rUserId, roleIds, req.userId]
   );
-  console.log(result);
-  return result.rows[0];
+  return result?.rows[0]?.assign_users_to_role?.rows;
 };
 
 export const roleList = async (req: UserRoleListRequest): Promise<{ data: UserRole[]; totalCount: number }> => {
@@ -122,8 +121,8 @@ export const roleList = async (req: UserRoleListRequest): Promise<{ data: UserRo
     `SELECT * FROM xapps.get_roles_by_user_id($1);`,
     [req?.userId]
   );
-  
-  return { data: result.rows, totalCount: Number(result?.rowCount)};
+
+  return { data: result.rows[0]?.get_roles_by_user_id?.rows, totalCount: Number(result.rows[0]?.get_roles_by_user_id?.totalCount)};
 };
 
 export const manageSpecialPermissions = async (req: ManageUserSpecialPermissionsRequest): Promise<boolean> => {
@@ -158,8 +157,7 @@ export const specialPermissionList = async (req: UserSpecialPermissionListReques
     `SELECT * FROM xapps.get_permissions_by_user_id($1);`,
     [req?.userId]
   );
-  
-  return { data: result.rows, totalCount: Number(result?.rowCount)};
+  return { data: result.rows[0]?.get_permissions_by_user_id?.rows, totalCount: Number(result.rows[0]?.get_permissions_by_user_id?.totalCount) };
 };
 
 export const getUserById = async (id: number): Promise<User> => {
