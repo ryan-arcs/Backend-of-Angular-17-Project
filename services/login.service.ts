@@ -82,16 +82,16 @@ export const getUserProfile = async (user: any): Promise<{ userProfile: UserProf
         };
     }
 
-    const baseRow = userInfo.rows[0];
-
+    const baseRow = userInfo?.rows[0];
     const userProfile: UserProfile = {
-        id: baseRow.id,
-        email: baseRow.email,
-        firstName: baseRow.given_name,
-        lastName: baseRow.family_name,
-        fullName: baseRow.full_name,
-        theme: baseRow.theme,
-        isActive: baseRow.is_active,
+        id: baseRow?.id,
+        email: baseRow?.email,
+        firstName: baseRow?.given_name,
+        lastName: baseRow?.family_name,
+        fullName: baseRow?.full_name,
+        theme: baseRow?.theme,
+        config: baseRow?.config,
+        isActive: baseRow?.is_active,
     };
 
     const permissions: Permission[] = [];
