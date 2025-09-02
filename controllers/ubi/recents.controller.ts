@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
-import { errorResponse } from '../utilities';
+import { errorResponse } from '../../utilities';
 
 interface TableauReuest extends Request {
   tableauConfig?: any;

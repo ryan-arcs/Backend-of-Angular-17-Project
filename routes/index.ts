@@ -1,13 +1,13 @@
 import { Application } from 'express';
-import userRoutes from './user.routes';
-import roleRoutes from './role.routes';
-import applicationRoutes from './applications.routes';
-import moduleRoutes from './module.routes';
-import submoduleRoutes from './submodule.routes';
-import permissionRoutes from './permission.routes';
 import userProfileRoutes from './user-profile.routes';
 import loginRoutes from './login.routes';
-import tableauRoutes from './tableau.routes';
+import userRoutes from './xapps-admin/user.routes';
+import roleRoutes from './xapps-admin/role.routes';
+import applicationRoutes from './xapps-admin/applications.routes';
+import moduleRoutes from './xapps-admin/module.routes';
+import submoduleRoutes from './xapps-admin/submodule.routes';
+import permissionRoutes from './xapps-admin/permission.routes';
+import tableauRoutes from './ubi/tableau.routes';
 
 // Register all route modules
 const registerRoutes = (app: Application): void => {

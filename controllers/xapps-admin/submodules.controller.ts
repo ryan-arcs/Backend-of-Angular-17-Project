@@ -1,17 +1,17 @@
 import { Request, Response } from 'express';
-import { commmonResponse } from '../utilities';
-import { createApplication, deleteApplication, getApplicationById, getApplications, updateApplication } from '../services';
-import { getListQueryParams } from '../utilities';
-import { getUserInfoFromHeader } from '../utilities/db-queries';
+import { commmonResponse } from '../../utilities';
+import { createSubmodule, deleteSubModule, getSubmoduleById, getSubmodules, updateSubmodule} from '../../services';
+import { getListQueryParams } from '../../utilities';
+import { getUserInfoFromHeader } from '../../utilities/db-queries';
 
-export const listApplicationsHandler = async (req: Request, res: Response): Promise<void> => {
+export const listSubmodulesHandler = async (req: Request, res: Response): Promise<void> => {
   try {
     const queryParams = getListQueryParams(req, { defaultSortColumn: 'updated_at' });
-    const { data, totalCount } = await getApplications(queryParams);
+    const { data, totalCount } = await getSubmodules(queryParams);
  
     commmonResponse({
       res,
-      statusDescription: data?.length ? "Applications are listed" : "Application list is empty",
+      statusDescription: data?.length ? "Submodules are listed" : "Submodule list is empty",
       data,
       totalCount
     })
@@ -20,16 +20,14 @@ export const listApplicationsHandler = async (req: Request, res: Response): Prom
     commmonResponse({
       res,
       statusCode: err?.statusCode || 520,
-      statusDescription: err?.toString() || err?.message || 'Unknown error!',
-      statusMessage: "Error"
+      statusMessage: err?.toString() || err?.message || 'Unknown error!'
     })
   }
 };
 
-
-export const createApplicationHandler = async (req: Request, res: Response) => {
+export const createSubmoduleHandler = async (req: Request, res: Response): Promise<void> => {
   try {
-    const result = await createApplication(req.body);
+    const result = await createSubmodule(req.body);
 
     commmonResponse({
       res,
@@ -48,9 +46,9 @@ export const createApplicationHandler = async (req: Request, res: Response) => {
   }
 };
 
-export const updateApplicationHandler = async (req: Request, res: Response) => {
+export const updateSubmoduleHandler = async (req: Request, res: Response): Promise<void> => {
   try {
-    const result = await updateApplication(req.body);
+    const result = await updateSubmodule(req.body);
     commmonResponse({
       res,
       statusCode: result?.status_code,
@@ -68,46 +66,20 @@ export const updateApplicationHandler = async (req: Request, res: Response) => {
   }
 };
 
-export const getApplicationHandler = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params;
-  if (!id) {
-    throw new Error("Invalid application Id.");
-  }
-
-  try {
-    const application = await getApplicationById(Number(id));
-
-    commmonResponse({
-      res,
-      statusMessage: "Success",
-      statusDescription: "Application is fetched successfully!",
-      data: application
-    })
-  } catch (err: any) {
-    commmonResponse({
-      res,
-      statusCode: err?.statusCode || 520,
-      statusDescription: err?.toString() || err?.message || 'Unknown error!',
-      statusMessage: "Error"
-    })
-  }
-};
-
-export const deleteApplicationHandler = async (req: Request, res: Response): Promise<void> => {
+export const deleteSubModuleHandler = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
   if (!id) {
     throw new Error("Invalid application Id.");
   }
 
   const loggedInUser = getUserInfoFromHeader(req.headers);
-  console.log("loggedInUser==", loggedInUser);
   const userId = loggedInUser?.id;
   if(!userId) {
     throw new Error("Invalid user.");
   }
 
   try {
-    const result = await deleteApplication(Number(id), userId);
+    const result = await deleteSubModule(Number(id), userId);
 
     commmonResponse({
       res,
@@ -116,6 +88,31 @@ export const deleteApplicationHandler = async (req: Request, res: Response): Pro
       statusDescription: result?.message
     })
 
+  } catch (err: any) {
+    commmonResponse({
+      res,
+      statusCode: err?.statusCode || 520,
+      statusDescription: err?.toString() || err?.message || 'Unknown error!',
+      statusMessage: "Error"
+    })
+  }
+};
+
+export const getSubmoduleHandler = async (req: Request, res: Response): Promise<void> => {
+  
+  const { id } = req.params;
+  if (!id) {
+    throw new Error("Invalid submodule Id.");
+  }
+
+  try {
+    const submodule = await getSubmoduleById(Number(id));
+
+    commmonResponse({
+      res,
+      statusMessage: "Submodule is fetched successfully",
+      data: submodule
+    })
   } catch (err: any) {
     commmonResponse({
       res,

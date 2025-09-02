@@ -1,18 +1,17 @@
 import { Request, Response } from 'express';
-import { commmonResponse } from '../utilities';
-import { getListQueryParams } from '../utilities';
-import { createModule, deleteModule, getModuleById, getModules, updateModule } from '../services';
-import { getUserInfoFromHeader } from '../utilities/db-queries';
+import { commmonResponse } from '../../utilities';
+import { createApplication, deleteApplication, getApplicationById, getApplications, updateApplication } from '../../services';
+import { getListQueryParams } from '../../utilities';
+import { getUserInfoFromHeader } from '../../utilities/db-queries';
 
-export const listModulesHandler = async (req: Request, res: Response): Promise<void> => {
+export const listApplicationsHandler = async (req: Request, res: Response): Promise<void> => {
   try {
     const queryParams = getListQueryParams(req, { defaultSortColumn: 'updated_at' });
-    const { data, totalCount } = await getModules(queryParams);
+    const { data, totalCount } = await getApplications(queryParams);
  
     commmonResponse({
       res,
-      statusMessage: "Success",
-      statusDescription: data?.length ? "Modules are listed" : "Module list is empty",
+      statusDescription: data?.length ? "Applications are listed" : "Application list is empty",
       data,
       totalCount
     })
@@ -21,13 +20,16 @@ export const listModulesHandler = async (req: Request, res: Response): Promise<v
     commmonResponse({
       res,
       statusCode: err?.statusCode || 520,
-      statusMessage: err?.toString() || err?.message || 'Unknown error!'
+      statusDescription: err?.toString() || err?.message || 'Unknown error!',
+      statusMessage: "Error"
     })
   }
 };
-export const createModuleHandler = async (req: Request, res: Response) => {
+
+
+export const createApplicationHandler = async (req: Request, res: Response) => {
   try {
-    const result = await createModule(req.body);
+    const result = await createApplication(req.body);
 
     commmonResponse({
       res,
@@ -46,16 +48,16 @@ export const createModuleHandler = async (req: Request, res: Response) => {
   }
 };
 
-export const updateModuleHandler = async (req: Request, res: Response) => {
+export const updateApplicationHandler = async (req: Request, res: Response) => {
   try {
-    const result = await updateModule(req.body);
-
+    const result = await updateApplication(req.body);
     commmonResponse({
       res,
       statusCode: result?.status_code,
       statusMessage: "Success",
       statusDescription: result?.message
     })
+
   } catch (err: any) {
     commmonResponse({
       res,
@@ -66,44 +68,46 @@ export const updateModuleHandler = async (req: Request, res: Response) => {
   }
 };
 
-export const getModuleHandler = async (req: Request, res: Response): Promise<void> => {
-  
+export const getApplicationHandler = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
   if (!id) {
-    throw new Error("Invalid Module Id.");
+    throw new Error("Invalid application Id.");
   }
 
   try {
-    const module = await getModuleById(Number(id));
+    const application = await getApplicationById(Number(id));
 
     commmonResponse({
       res,
-      statusMessage: "module is fetched successfully",
-      data: module
+      statusMessage: "Success",
+      statusDescription: "Application is fetched successfully!",
+      data: application
     })
   } catch (err: any) {
     commmonResponse({
       res,
       statusCode: err?.statusCode || 520,
-      statusMessage: err?.toString() || err?.message || 'Unknown error!'
+      statusDescription: err?.toString() || err?.message || 'Unknown error!',
+      statusMessage: "Error"
     })
   }
 };
 
-export const deleteModuleHandler = async (req: Request, res: Response): Promise<void> => {
+export const deleteApplicationHandler = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
   if (!id) {
     throw new Error("Invalid application Id.");
   }
 
   const loggedInUser = getUserInfoFromHeader(req.headers);
+  console.log("loggedInUser==", loggedInUser);
   const userId = loggedInUser?.id;
   if(!userId) {
     throw new Error("Invalid user.");
   }
 
   try {
-    const result = await deleteModule(Number(id), userId);
+    const result = await deleteApplication(Number(id), userId);
 
     commmonResponse({
       res,

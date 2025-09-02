@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { commmonResponse } from '../utilities';
-import { getRoles, managePermissions, permissionList, createRole, getRoleById, updateRole, deleteRole, userList, manageUsers } from '../services';
-import { getListQueryParams } from '../utilities';
-import { getUserInfoFromHeader } from '../utilities/db-queries';
+import { commmonResponse } from '../../utilities';
+import { getRoles, managePermissions, permissionList, createRole, getRoleById, updateRole, deleteRole, userList, manageUsers } from '../../services';
+import { getListQueryParams } from '../../utilities';
+import { getUserInfoFromHeader } from '../../utilities/db-queries';
 
 export const listRolesHandler = async (
   req: Request,

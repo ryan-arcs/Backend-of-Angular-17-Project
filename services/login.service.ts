@@ -47,7 +47,7 @@ export const loginUser = async (params: LoginParams) => {
             family_name: user.data.user.family_name
         },
         process.env.JWT_SECRET!,
-        { expiresIn: "3h" }
+        { expiresIn: "1h" }
     );
 
     return {

@@ -1,5 +1,5 @@
 import express from 'express';
-import { createApplicationHandler, deleteApplicationHandler, getApplicationHandler, listApplicationsHandler, updateApplicationHandler } from '../controllers';
+import { createApplicationHandler, deleteApplicationHandler, getApplicationHandler, listApplicationsHandler, updateApplicationHandler } from '../../controllers';
 
 const router = express.Router();
 

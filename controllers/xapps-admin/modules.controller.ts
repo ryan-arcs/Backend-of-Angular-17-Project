@@ -1,17 +1,18 @@
 import { Request, Response } from 'express';
-import { commmonResponse } from '../utilities';
-import { createPermission, deletePermission, getPermissionById, getPermissions, updatePermission } from '../services';
-import { getListQueryParams } from '../utilities';
-import { getUserInfoFromHeader } from '../utilities/db-queries';
+import { commmonResponse } from '../../utilities';
+import { getListQueryParams } from '../../utilities';
+import { createModule, deleteModule, getModuleById, getModules, updateModule } from '../../services';
+import { getUserInfoFromHeader } from '../../utilities/db-queries';
 
-export const listPermissionsHandler = async (req: Request, res: Response): Promise<void> => {
+export const listModulesHandler = async (req: Request, res: Response): Promise<void> => {
   try {
     const queryParams = getListQueryParams(req, { defaultSortColumn: 'updated_at' });
-    const { data, totalCount } = await getPermissions(queryParams);
+    const { data, totalCount } = await getModules(queryParams);
  
     commmonResponse({
       res,
-      statusDescription: data?.length ? "Permissions are listed" : "Permission list is empty",
+      statusMessage: "Success",
+      statusDescription: data?.length ? "Modules are listed" : "Module list is empty",
       data,
       totalCount
     })
@@ -24,10 +25,9 @@ export const listPermissionsHandler = async (req: Request, res: Response): Promi
     })
   }
 };
-
-export const createPermissionHandler = async (req: Request, res: Response) => {
+export const createModuleHandler = async (req: Request, res: Response) => {
   try {
-    const result = await createPermission(req.body);
+    const result = await createModule(req.body);
 
     commmonResponse({
       res,
@@ -46,9 +46,10 @@ export const createPermissionHandler = async (req: Request, res: Response) => {
   }
 };
 
-export const updatePermissionHandler = async (req: Request, res: Response) => {
+export const updateModuleHandler = async (req: Request, res: Response) => {
   try {
-    const result = await updatePermission(req.body);
+    const result = await updateModule(req.body);
+
     commmonResponse({
       res,
       statusCode: result?.status_code,
@@ -65,20 +66,20 @@ export const updatePermissionHandler = async (req: Request, res: Response) => {
   }
 };
 
-export const getPermissionHandler = async (req: Request, res: Response): Promise<void> => {
+export const getModuleHandler = async (req: Request, res: Response): Promise<void> => {
   
   const { id } = req.params;
   if (!id) {
-    throw new Error("Invalid permission id.");
+    throw new Error("Invalid Module Id.");
   }
 
   try {
-    const Permission = await getPermissionById(Number(id));
+    const module = await getModuleById(Number(id));
 
     commmonResponse({
       res,
-      statusMessage: "Permission is fetched successfully",
-      data: Permission
+      statusMessage: "module is fetched successfully",
+      data: module
     })
   } catch (err: any) {
     commmonResponse({
@@ -89,7 +90,7 @@ export const getPermissionHandler = async (req: Request, res: Response): Promise
   }
 };
 
-export const deletePermissionHandler = async (req: Request, res: Response): Promise<void> => {
+export const deleteModuleHandler = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
   if (!id) {
     throw new Error("Invalid application Id.");
@@ -102,7 +103,7 @@ export const deletePermissionHandler = async (req: Request, res: Response): Prom
   }
 
   try {
-    const result = await deletePermission(Number(id), userId);
+    const result = await deleteModule(Number(id), userId);
 
     commmonResponse({
       res,

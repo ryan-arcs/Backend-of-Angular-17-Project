@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { commmonResponse } from '../utilities';
-import { createUser, getUserById, getUsers, manageRoles, manageSpecialPermissions, roleList, specialPermissionList, updateUser } from '../services';
-import { getListQueryParams } from '../utilities';
+import { commmonResponse } from '../../utilities';
+import { createUser, getUserById, getUsers, manageRoles, manageSpecialPermissions, roleList, specialPermissionList, updateUser } from '../../services';
+import { getListQueryParams } from '../../utilities';
 
 export const listUsersHandler = async (req: Request, res: Response): Promise<void> => {
   try {

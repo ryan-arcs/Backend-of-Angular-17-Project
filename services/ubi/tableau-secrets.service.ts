@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
-import { TableauSecretResponse, TableauSecrets } from "../interfaces";
-import { redisClient } from './redis-client.service';
+import { TableauSecretResponse, TableauSecrets } from "../../interfaces";
+import { redisClient } from '.';
 
 
 // Load env only in dev (not needed in prod containers if envs are passed directly)

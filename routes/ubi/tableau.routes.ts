@@ -1,8 +1,8 @@
 import express from 'express';
 import cron from 'node-cron';
-import { addFavoriteApiResponse, authTokenRefreshHandler, authTokenResponse, deleteFavoriteApiResponse, environmentProjectsResoponse, jwtTokenResponse, listFavoriteApiResponse, recentsResponse, refreshTokenJob, thumbnailProxyResponse } from '../controllers';
-import { commonHeaders } from '../middleware';
-import { tableauSecrets } from '../services';
+import { addFavoriteApiResponse, authTokenRefreshHandler, authTokenResponse, deleteFavoriteApiResponse, environmentProjectsResoponse, jwtTokenResponse, listFavoriteApiResponse, recentsResponse, refreshTokenJob, thumbnailProxyResponse } from '../../controllers';
+import { commonHeaders } from '../../middleware';
+import { tableauSecrets } from '../../services';
 
 const router = express.Router();
 

@@ -1,5 +1,5 @@
-import { listQuery, executeQuery } from '../utilities/db-queries';
-import {CreateApplicationParams, ListQueryParams, UpdateApplicationParams } from '../interfaces';
+import { listQuery, executeQuery } from '../../utilities/db-queries';
+import {CreateApplicationParams, ListQueryParams, UpdateApplicationParams } from '../../interfaces';
 
 export const getApplications = async (params: ListQueryParams): Promise<{ data: any[]; totalCount: number }> => {
   return await listQuery({

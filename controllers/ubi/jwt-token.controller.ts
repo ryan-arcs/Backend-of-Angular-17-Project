@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { commmonResponse, errorResponse, generateJwt } from '../utilities';
+import { commmonResponse, errorResponse, generateJwt } from '../../utilities';
 
 interface TableauReuest extends Request {
   tableauConfig?: any;

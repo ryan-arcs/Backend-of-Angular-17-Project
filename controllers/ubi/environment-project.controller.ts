@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import axios from 'axios';
-import { TableauRequest } from '../interfaces';
-import { commmonResponse, errorResponse } from '../utilities';
+import { TableauRequest } from '../../interfaces';
+import { commmonResponse, errorResponse } from '../../utilities';
 
 export const environmentProjectsResoponse = async (req: TableauRequest, res: Response) => {
   try {

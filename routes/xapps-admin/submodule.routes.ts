@@ -1,5 +1,5 @@
 import express from 'express';
-import { createSubmoduleHandler, deleteSubModuleHandler, getSubmoduleHandler, listSubmodulesHandler, updateSubmoduleHandler } from '../controllers';
+import { createSubmoduleHandler, deleteSubModuleHandler, getSubmoduleHandler, listSubmodulesHandler, updateSubmoduleHandler } from '../../controllers';
 
 const router = express.Router();
 

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
-import { tableauSecrets, updateTableauSecrets } from '../services';
+import { tableauSecrets, updateTableauSecrets } from '../../services';
 
 
 export const authTokenRefreshHandler = async (req: Request, res: Response) => {

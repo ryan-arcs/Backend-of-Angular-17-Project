@@ -1,5 +1,5 @@
 import express from 'express';
-import { createUserHandler, getUserHandler, listUsersHandler, updateUserHandler, userRoleListHandler, userRolesHandler, userSpecialPermissionHandler, userSpecialPermissionListHandler } from '../controllers';
+import { createUserHandler, getUserHandler, listUsersHandler, updateUserHandler, userRoleListHandler, userRolesHandler, userSpecialPermissionHandler, userSpecialPermissionListHandler } from '../../controllers';
 
 const router = express.Router();
 

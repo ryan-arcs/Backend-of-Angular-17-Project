@@ -1,6 +1,6 @@
-import { ManagePermissionsRequest, RolePermissionListRequest, Role, RolePermission, CreateRoleParams, UpdateRoleParams, ManageUsersRequest, RoleUserListRequest, User } from '../interfaces';
-import { executeQuery, listQuery } from '../utilities/db-queries';
-import { ListQueryParams } from '../interfaces';
+import { ManagePermissionsRequest, RolePermissionListRequest, Role, RolePermission, CreateRoleParams, UpdateRoleParams, ManageUsersRequest, RoleUserListRequest, User } from '../../interfaces';
+import { executeQuery, listQuery } from '../../utilities/db-queries';
+import { ListQueryParams } from '../../interfaces';
 
 export const getRoles = async (params: ListQueryParams): Promise<{ data: Role[]; totalCount: number }> => {
   return await listQuery({

@@ -1,6 +1,6 @@
-import { CreatePermissionParams, Permission, UpdatePermissionParams } from '../interfaces';
-import { executeQuery, listQuery } from '../utilities/db-queries';
-import { ListQueryParams } from '../interfaces';
+import { CreatePermissionParams, Permission, UpdatePermissionParams } from '../../interfaces';
+import { executeQuery, listQuery } from '../../utilities/db-queries';
+import { ListQueryParams } from '../../interfaces';
 
 export const getPermissions = async (params: ListQueryParams): Promise<{ data: Permission[]; totalCount: number }> => {
   return await listQuery({

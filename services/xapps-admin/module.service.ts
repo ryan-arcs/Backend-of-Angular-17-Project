@@ -1,6 +1,6 @@
-import { CreateModuleParams, Module, UpdateModuleParams } from '../interfaces';
-import { executeQuery, listQuery } from '../utilities/db-queries';
-import { ListQueryParams } from '../interfaces';
+import { CreateModuleParams, Module, UpdateModuleParams } from '../../interfaces';
+import { executeQuery, listQuery } from '../../utilities/db-queries';
+import { ListQueryParams } from '../../interfaces';
 
 export const getModules = async (params: ListQueryParams): Promise<{ data: Module[]; totalCount: number }> => {
   return await listQuery({

@@ -1,5 +1,5 @@
 import express from 'express';
-import { createModuleHandler, deleteModuleHandler, getModuleHandler, listModulesHandler, updateModuleHandler } from '../controllers';
+import { createModuleHandler, deleteModuleHandler, getModuleHandler, listModulesHandler, updateModuleHandler } from '../../controllers';
 
 const router = express.Router();
 

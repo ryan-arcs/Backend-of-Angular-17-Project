@@ -1,7 +1,7 @@
-import { CreateUserParams, ManageRolesRequest, ManageUserSpecialPermissionsRequest, UpdateUserParams, User, UserRole, UserRoleListRequest, UserSpecialPermission, UserSpecialPermissionListRequest } from '../interfaces';
-import { executeQuery, listQuery } from '../utilities/db-queries';
-import { ListQueryParams } from '../interfaces';
-import { isValidEmail } from '../utilities/email-format-validator.utility';
+import { CreateUserParams, ManageRolesRequest, ManageUserSpecialPermissionsRequest, UpdateUserParams, User, UserRole, UserRoleListRequest, UserSpecialPermission, UserSpecialPermissionListRequest } from '../../interfaces';
+import { executeQuery, listQuery } from '../../utilities/db-queries';
+import { ListQueryParams } from '../../interfaces';
+import { isValidEmail } from '../../utilities/email-format-validator.utility';
 
 export const getUsers = async (params: ListQueryParams): Promise<{ data: User[]; totalCount: number }> => {
   return await listQuery({

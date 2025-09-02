@@ -1,6 +1,6 @@
-import { CreateSubModuleParams, Submodule, UpdateSubModuleParams } from '../interfaces';
-import { executeQuery, listQuery } from '../utilities/db-queries';
-import { ListQueryParams } from '../interfaces';
+import { CreateSubModuleParams, Submodule, UpdateSubModuleParams } from '../../interfaces';
+import { executeQuery, listQuery } from '../../utilities/db-queries';
+import { ListQueryParams } from '../../interfaces';
 
 export const getSubmodules = async (params: ListQueryParams): Promise<{ data: Submodule[]; totalCount: number }> => {
   return await listQuery({

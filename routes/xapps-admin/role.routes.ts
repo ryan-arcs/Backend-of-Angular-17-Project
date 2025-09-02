@@ -1,5 +1,5 @@
 import express from 'express';
-import { listRolesHandler, rolePermissionListHandler, rolePermissionsHandler, createRoleHandler, getRoleHandler, updateRoleHandler, deleteRoleHandler, roleUsersHandler, roleUserListHandler } from '../controllers';
+import { listRolesHandler, rolePermissionListHandler, rolePermissionsHandler, createRoleHandler, getRoleHandler, updateRoleHandler, deleteRoleHandler, roleUsersHandler, roleUserListHandler } from '../../controllers';
 
 const router = express.Router();
 

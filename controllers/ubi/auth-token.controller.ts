@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
-import { commmonResponse, errorResponse, generateJwt } from '../utilities';
+import { commmonResponse, errorResponse, generateJwt } from '../../utilities';
 
 
 interface TableauReuest extends Request {
