@@ -1,13 +1,11 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
 import { executeQuery } from "../utilities/db-queries";
 import { LoginParams } from "../interfaces";
 import { isValidEmail } from "../utilities/email-format-validator.utility";
 import { Request } from "express";
 import { Permission, PermittedApplication, UserProfile } from "../interfaces/user-profile.interface";
 
-dotenv.config();
 export const loginUser = async (params: LoginParams) => {
     const { email, password } = params;
     if (!(email && password)) {

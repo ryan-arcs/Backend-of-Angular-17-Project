@@ -1,7 +1,12 @@
 import dotenv from 'dotenv';
 import { TableauSecretResponse, TableauSecrets } from "../interfaces";
 import { redisClient } from './redis-client.service';
-dotenv.config();
+
+
+// Load env only in dev (not needed in prod containers if envs are passed directly)
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
 
 const TABLEAU_TOKEN_KEY = "TABLEAU_APP_ADMIN_AUTH_TOKEN";
 

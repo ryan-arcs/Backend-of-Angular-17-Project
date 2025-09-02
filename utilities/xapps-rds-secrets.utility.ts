@@ -1,6 +1,4 @@
-import dotenv from 'dotenv';
 import { XAppsRdsSecrets } from '../interfaces';
-dotenv.config();
 
 export const xAppsRdsSecrets = async (): Promise<XAppsRdsSecrets> => {
     return {

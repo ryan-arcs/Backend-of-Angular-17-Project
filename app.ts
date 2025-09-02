@@ -1,8 +1,16 @@
+import dotenv from 'dotenv';
 import express, { Request} from 'express';
 import cors from 'cors';
 import registerRoutes from './routes';
 
+// Load env only in dev (not needed in prod containers if envs are passed directly)
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
+
 export const app = express();
+
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
@@ -22,6 +30,6 @@ app.get('/', async (req, res) => {
     res.send('API is running...');
 });
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
 });
