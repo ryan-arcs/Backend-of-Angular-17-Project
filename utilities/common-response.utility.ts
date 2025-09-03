@@ -6,6 +6,7 @@ interface ApiResponse {
     statusMessage?: string;
     statusDescription?: string;
     data?: any;
+    id?: number;
     totalCount?: number
 }
 
@@ -16,6 +17,7 @@ interface CommonResponse {
     dateTime: string;
     data: any;
     totalCount?: number;
+    id?: number;
 }
 
 export const commmonResponse = (response: ApiResponse) => {
@@ -36,6 +38,9 @@ export const commmonResponse = (response: ApiResponse) => {
     if(response.totalCount) {
         commonResponse.totalCount = response.totalCount
     }
-    
+    if(response.id) {
+        commonResponse.id = response.id;
+    }
+
     response.res.status(statusCode || 200).json(commonResponse);
 }

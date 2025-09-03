@@ -8,6 +8,8 @@ import moduleRoutes from './xapps-admin/module.routes';
 import submoduleRoutes from './xapps-admin/submodule.routes';
 import permissionRoutes from './xapps-admin/permission.routes';
 import tableauRoutes from './ubi/tableau.routes';
+import departmentRoutes from './asher/departments.routes';
+import vendorRoutes from './asher/vendors.routes';
 
 // Register all route modules
 const registerRoutes = (app: Application): void => {
@@ -19,6 +21,8 @@ const registerRoutes = (app: Application): void => {
   app.use('/xapps-admin/permissions', permissionRoutes);
   app.use('/xapps-admin/user-profile', userProfileRoutes);
   app.use('/tableau', tableauRoutes);
+  app.use('/asher/departments', departmentRoutes);
+  app.use('/asher/vendors', vendorRoutes);
   app.use('/', loginRoutes);
 };
 

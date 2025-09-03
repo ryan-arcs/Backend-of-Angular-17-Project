@@ -8,3 +8,4 @@ export * from './permission.interface';
 export * from './application.interface';
 export * from './login.interface';
 export * from './tableau.interface';
+export * from './asher.interface';
