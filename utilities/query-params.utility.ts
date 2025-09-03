@@ -11,7 +11,8 @@ export const getListQueryParams = (req: Request, options: GetListQueryParamsOpti
   const appId =  parseInt(req.query?.appId as string, 10) || undefined;
   const moduleId = parseInt(req.query?.moduleId as string, 10) || undefined;
   const submoduleId = parseInt(req.query?.submoduleId as string, 10) || undefined;
+  const columnFilters = (req.query?.columnFilters as string) ? JSON.parse(req.query.columnFilters as string) : undefined;
   const skipLimit = Boolean(req.query?.skipLimit);
- 
-  return { pageIndex, pageSize, sortColumn, sortDirection, globalSearch, appId, moduleId, submoduleId, skipLimit, applicationSlug };
+
+  return { pageIndex, pageSize, sortColumn, sortDirection, globalSearch, appId, moduleId, submoduleId, skipLimit, applicationSlug, columnFilters };
 };

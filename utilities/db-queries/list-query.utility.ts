@@ -1,3 +1,5 @@
+import { ColumnFilter } from '../../interfaces';
+import { buildColumnFilterWhereClause } from '../build-column-filter.utility';
 import { executeQuery } from './db-query-executor.utility';
 
 interface PaginateOptions {
@@ -13,6 +15,7 @@ interface PaginateOptions {
   submoduleId?: number;
   skipLimit?: boolean;
   applicationSlug?: string;
+  columnFilters?: ColumnFilter[];
 }
 
 export const listQuery = async ({
@@ -23,6 +26,7 @@ export const listQuery = async ({
   sortColumn,
   sortDirection,
   globalSearch,
+  columnFilters,
   appId,
   moduleId,
   submoduleId,
@@ -39,8 +43,15 @@ export const listQuery = async ({
       placeHolders.push(`%${globalSearch}%`);
       return `${col} ILIKE $${placeHolders.length}`;
     });
-    console.log("searchConditions===", searchConditions);
     whereConditions.push(`(${searchConditions.join(' OR ')})`);
+  }
+
+  // Column filters condition
+  if (columnFilters && columnFilters.length > 0) {
+    const columnFilterSQL = buildColumnFilterWhereClause(columnFilters, placeHolders);
+    if (columnFilterSQL) {
+      whereConditions.push(columnFilterSQL);
+    }
   }
 
   // appId condition
