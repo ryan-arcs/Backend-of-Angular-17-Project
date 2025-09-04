@@ -10,6 +10,7 @@ import permissionRoutes from './xapps-admin/permission.routes';
 import tableauRoutes from './ubi/tableau.routes';
 import departmentRoutes from './asher/departments.routes';
 import vendorRoutes from './asher/vendors.routes';
+import lifecycleRoutes from './asher/lifecycles.routes';
 
 // Register all route modules
 const registerRoutes = (app: Application): void => {
@@ -23,6 +24,7 @@ const registerRoutes = (app: Application): void => {
   app.use('/tableau', tableauRoutes);
   app.use('/asher/departments', departmentRoutes);
   app.use('/asher/vendors', vendorRoutes);
+  app.use('/asher/lifecycles', lifecycleRoutes);
   app.use('/', loginRoutes);
 };
 

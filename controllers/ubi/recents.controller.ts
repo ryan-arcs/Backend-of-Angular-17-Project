@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
-import { errorResponse } from '../../utilities';
+import { commmonResponse, errorResponse } from '../../utilities';
 
 interface TableauReuest extends Request {
   tableauConfig?: any;
@@ -38,8 +38,14 @@ export const recentsResponse = async (req: TableauReuest, res: Response) => {
       response?.data?.pagination?.totalAvailable &&
       allRecents?.length < response?.data?.pagination?.totalAvailable
     );
-
-    res.status(200).json(allRecents);
+    
+    commmonResponse({
+      res,
+      data: allRecents,
+      statusCode: 200,
+      statusMessage: "Success",
+      statusDescription: "Recents fetched successfully"
+    })
   } catch (err: any) {
     errorResponse({
       res,
