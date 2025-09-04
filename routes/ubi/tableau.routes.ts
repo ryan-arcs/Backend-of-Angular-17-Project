@@ -25,8 +25,11 @@ const router = express.Router();
 })();
 
 cron.schedule("0 */3 * * *", async () => {
-  console.log("⏰ Running every 3 hours:", new Date().toISOString());
+  const now = new Date();
+  console.log("⏰ Running every 3 hours (IST):", now.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }));
   await refreshTokenJob();
+}, {
+  timezone: "Asia/Kolkata"
 });
 
 export default router;

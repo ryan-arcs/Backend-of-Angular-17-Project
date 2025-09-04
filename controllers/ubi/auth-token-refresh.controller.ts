@@ -26,8 +26,8 @@ export const refreshTokenJob = async () => {
       console.error("❌ Failed to refresh Tableau token");
       return null;
     }
-
-    console.log("✅ Tableau token refreshed successfully at", new Date().toISOString());
+    const now = new Date();
+    console.log("✅ Tableau token refreshed successfully at", now.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }));
     return token;
   } catch (error: any) {
     console.error("🔥 Error refreshing Tableau token:", error?.message || error);
