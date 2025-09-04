@@ -11,6 +11,7 @@ import tableauRoutes from './ubi/tableau.routes';
 import departmentRoutes from './asher/departments.routes';
 import vendorRoutes from './asher/vendors.routes';
 import lifecycleRoutes from './asher/lifecycles.routes';
+import asherUserRoutes from './asher/users.routes';
 
 // Register all route modules
 const registerRoutes = (app: Application): void => {
@@ -25,6 +26,7 @@ const registerRoutes = (app: Application): void => {
   app.use('/asher/departments', departmentRoutes);
   app.use('/asher/vendors', vendorRoutes);
   app.use('/asher/lifecycles', lifecycleRoutes);
+  app.use('/asher/users', asherUserRoutes);
   app.use('/', loginRoutes);
 };
 
