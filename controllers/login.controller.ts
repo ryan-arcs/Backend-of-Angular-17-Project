@@ -27,14 +27,13 @@ export const loginHandler = async (req: Request, res: Response) => {
 
 export const profileHandler = async (req: UserRequest, res: Response) => {
   try {
-    const result = await getUserProfile(req.user);
+    const data = await getUserProfile(req.user);
 
     commmonResponse({
       res,
-      data: result?.data,
-      statusCode: result?.status_code,
-      statusMessage: result.status_code === 200 ? "Success" : "Error",
-      statusDescription: result?.message as string
+      data,
+      statusDescription: data?.userProfile ? "User profile listed" : "User profile is empty",
+      statusMessage: "Success"
     })
 
   } catch (err: any) {

@@ -39,7 +39,7 @@ export interface RolePermission extends Permission{
 export interface RoleUser extends RolePermission {}
 
 export interface ManagePermissionsRequest {
-  userId: number;
+  userId: string;
   roleId: number;
   assignedPermissions: Permission[];
 }
@@ -49,7 +49,7 @@ export interface RolePermissionListRequest {
 }
 
 export interface ManageUsersRequest {
-  userId: number;
+  userId: string;
   roleId: number;
   assignedUsers: User[];
 }
@@ -63,7 +63,7 @@ export interface CreateRoleParams {
   description?: string;
   slug: string;
   appId?: number;  // Optional
-  userId: number;
+  userId: string;
 }
 
 export interface UpdateRoleParams extends CreateRoleParams {

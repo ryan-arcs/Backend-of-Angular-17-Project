@@ -1,12 +1,11 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
 import { executeQuery } from "../utilities/db-queries";
 import { LoginParams } from "../interfaces";
 import { isValidEmail } from "../utilities/email-format-validator.utility";
 import { Request } from "express";
+import { Permission, PermittedApplication, UserProfile } from "../interfaces/user-profile.interface";
 
-dotenv.config();
 export const loginUser = async (params: LoginParams) => {
     const { email, password } = params;
     if (!(email && password)) {
@@ -48,7 +47,7 @@ export const loginUser = async (params: LoginParams) => {
             family_name: user.data.user.family_name
         },
         process.env.JWT_SECRET!,
-        { expiresIn: "30m" }
+        { expiresIn: "1h" }
     );
 
     return {
@@ -60,35 +59,70 @@ export const loginUser = async (params: LoginParams) => {
     };
 }
 
-export const getUserProfile = async (user: any) => {
-    try {
-        const { sub: userId } = user;
+export const getUserProfile = async (user: any): Promise<{ userProfile: UserProfile | null; permissions: Permission[]; applications: PermittedApplication[] }> => {
+    const { email } = user;
+    if (!email) {
+        throw new Error("Unauthorized");
+    }
 
-        if (!userId) {
-            throw new Error("Unauthorized");
-        }
-        
-        const query = `SELECT * FROM xapps.admin_users WHERE id = $1`;
+    const query = `SELECT * FROM xapps.get_login_user_info($1);`;
+    const placeHolders = [email];
+    const result = await executeQuery(query, placeHolders);
 
-        const placeHolders = [userId];
-        const result = await executeQuery(query, placeHolders);
+    const userInfo = result?.rows[0]?.get_login_user_info;
 
-        if (result.rows.length === 0) {
-            throw new Error("User not found" );
-        }
+    // if no rows
+    if (!userInfo?.rows?.length) {
         return {
-            status_code: 200,
-            message: "Profile fetched successfully",
-            data: result.rows[0]
-        };
-            
-    } catch (error) {
-        return {
-            status_code: 500,
-            message: error || "Something went wrong"
+            userProfile: null,
+            permissions: [],
+            applications: [] 
         };
     }
-}
+
+    const baseRow = userInfo?.rows[0];
+    const userProfile: UserProfile = {
+        id: baseRow?.id,
+        email: baseRow?.email,
+        firstName: baseRow?.given_name,
+        lastName: baseRow?.family_name,
+        fullName: baseRow?.full_name,
+        theme: baseRow?.theme,
+        config: baseRow?.config,
+        isActive: baseRow?.is_active,
+    };
+
+    const permissions: Permission[] = [];
+    const applications: PermittedApplication[] = [];
+
+    for (const row of userInfo.rows) {
+        if (!row.app_slug) continue;
+    
+        if (!applications.some((application) => application.id === row.app_id)) {
+            applications.push({
+                id: row.app_id,
+                slug: row.app_slug,
+                name: row.app_name,
+                logo: row.app_logo,
+                sortOrder: row.sort_order
+            });
+        }
+        
+        permissions.push({
+            aSlug: row.app_slug,
+            mSlug: row.p_m_slug,
+            smSlug: row.sm_slug,
+            pSlug: row.p_slug,
+        });
+    }
+    
+    return {
+        userProfile,
+        permissions,
+        applications 
+    }
+};
+
 
 export const getUserTheme = async (req: Request) => {
     const {theme} = req.body;

@@ -1,3 +1,5 @@
+import { ColumnFilter } from "./common-interfaces";
+
 export interface ListQueryParams {
     pageIndex: number;
     pageSize: number;
@@ -9,6 +11,7 @@ export interface ListQueryParams {
     submoduleId?: number;
     skipLimit?: boolean;
     applicationSlug?: string;
+    columnFilters?: ColumnFilter[];
   }
    
   export interface GetListQueryParamsOptions {

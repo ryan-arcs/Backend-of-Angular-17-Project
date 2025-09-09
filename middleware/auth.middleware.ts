@@ -1,8 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
 import { commmonResponse } from "../utilities";
-dotenv.config();
 
 export interface UserRequest extends Request {
     user?: any;
