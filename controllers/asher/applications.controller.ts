@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-import { getAsherApplicationById, getAsherApplications, getAuthorityUsers, getItContactUsers } from "../../services";
+import { createAsherApplication, deleteAsherApplication, getAsherApplicationById, getAsherApplications, getAuthorityUsers, getItContactUsers, updateAsherApplication } from "../../services";
 import { commmonResponse, getListQueryParams } from "../../utilities";
+import { getUserInfoFromHeader } from "../../utilities/db-queries";
 
 export const listAsherApplicationsHandler = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -80,6 +81,83 @@ export const listItContactUsersHandler = async (req: Request, res: Response): Pr
       totalCount
     })
  
+  } catch (err: any) {
+    commmonResponse({
+      res,
+      statusCode: err?.statusCode || 520,
+      statusDescription: err?.toString() || err?.message || 'Unknown error!',
+      statusMessage: "Error"
+    })
+  }
+};
+
+export const createAsherApplicationHandler = async (req: Request, res: Response) => {
+  try {
+    const result = await createAsherApplication(req.body?.data);
+    console.log('Application created successfully:', result);
+    commmonResponse({
+      res,
+      id: result?.data?.id,
+      statusCode: result?.status_code,
+      statusMessage: "Success",
+      statusDescription: result?.message
+    })
+
+  } catch (err: any) {
+    commmonResponse({
+      res,
+      statusCode: err?.statusCode || 520,
+      statusDescription: err?.toString() || err?.message || 'Unknown error!',
+      statusMessage: "Error"
+    })
+  }
+};
+
+export const updateAsherApplicationHandler = async (req: Request, res: Response) => {
+  try {
+    console.log("Update application request body:", req.body);
+    const result = await updateAsherApplication(req.body?.data);
+    commmonResponse({
+      res,
+      statusCode: result?.status_code,
+      statusMessage: "Success",
+      statusDescription: result?.message
+    })
+
+  } catch (err: any) {
+    commmonResponse({
+      res,
+      statusCode: err?.statusCode || 520,
+      statusDescription: err?.toString() || err?.message || 'Unknown error!',
+      statusMessage: "Error"
+    })
+  }
+};
+
+export const deleteAsherApplicationHandler = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params;
+  
+  if (!id) {
+    throw new Error("Invalid vendor Id.");
+  }
+
+  const loggedInUser = getUserInfoFromHeader(req.headers);
+  console.log("loggedInUser==", loggedInUser);
+  const userId = loggedInUser?.id;
+  if(!userId) {
+    throw new Error("Invalid user.");
+  }
+
+  try {
+    const result = await deleteAsherApplication(Number(id), userId);
+
+    commmonResponse({
+      res,
+      statusCode: result?.status_code,
+      statusMessage: "Success",
+      statusDescription: result?.message
+    })
+
   } catch (err: any) {
     commmonResponse({
       res,

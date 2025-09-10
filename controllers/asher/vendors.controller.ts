@@ -96,13 +96,12 @@ export const updateVendorHandler = async (req: Request, res: Response) => {
 
 export const deleteVendorHandler = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
-  console.log("id===", id);
+  
   if (!id) {
     throw new Error("Invalid vendor Id.");
   }
 
   const loggedInUser = getUserInfoFromHeader(req.headers);
-  console.log("loggedInUser==", loggedInUser);
   const userId = loggedInUser?.id;
   if(!userId) {
     throw new Error("Invalid user.");
