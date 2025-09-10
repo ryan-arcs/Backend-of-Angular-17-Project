@@ -1,12 +1,23 @@
 import { Request, Response } from "express";
 import { createAsherApplication, deleteAsherApplication, getAsherApplicationById, getAsherApplications, getAuthorityUsers, getItContactUsers, updateAsherApplication } from "../../services";
-import { commmonResponse, getListQueryParams } from "../../utilities";
+import { commmonResponse, exportToExcel, getListQueryParams } from "../../utilities";
 import { getUserInfoFromHeader } from "../../utilities/db-queries";
 
 export const listAsherApplicationsHandler = async (req: Request, res: Response): Promise<void> => {
   try {
     const queryParams = getListQueryParams(req, { defaultSortColumn: 'last_modified_at' });
     const { data, totalCount } = await getAsherApplications(queryParams);
+
+    if (req.query?.download === "true") {
+      const orderedColumns = (req.query?.orderedColumns as string) || "";
+      const fileBuffer = await exportToExcel(data, orderedColumns, queryParams);
+
+      res.setHeader("Content-Disposition", `attachment; filename="applications.xlsx"`);
+      res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+      res.end(fileBuffer);
+      return;
+    }
+
     commmonResponse({
       res,
       statusDescription: data?.length ? "Applications are listed" : "Application list is empty",
