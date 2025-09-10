@@ -89,6 +89,30 @@ export const listQuery = async ({
 
   const totalCount = parseInt(countResult.rows[0].count, 10);
 
+   let orderByClause = '';
+  if (sortColumn) {
+    // Validate sortDirection to prevent SQL injection
+    const validDirection = sortDirection?.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
+    
+    // SAFE: Check if this is specifically the asher_applications_vw table with JSON columns
+    const isAsherApplicationsView = tableName === 'xapps.asher_applications_vw';
+    const jsonColumns = ['business_owners', 'system_owners', 'product_owners', 'product_managers', 'it_contacts'];
+    
+    if (isAsherApplicationsView && jsonColumns.includes(sortColumn)) {
+      // Special handling ONLY for asher_applications_vw JSON columns
+      orderByClause = `ORDER BY (
+        CASE 
+          WHEN jsonb_array_length(${sortColumn}) > 0 
+          THEN ${sortColumn}->0->>'fullname_preferred'
+          ELSE ''
+        END
+      ) ${validDirection}`;
+    } else {
+      // Default behavior for all other tables and columns
+      orderByClause = `ORDER BY ${sortColumn} ${validDirection}`;
+    }
+  }
+
   // Paginated data query
   let paginationQueryOption = '';
   if(!skipLimit){
@@ -100,7 +124,7 @@ export const listQuery = async ({
   const dataResult = await executeQuery(
     `SELECT * FROM ${tableName}
      ${whereClause}
-     ORDER BY ${sortColumn} ${sortDirection}
+     ${orderByClause}
      ${paginationQueryOption}`,
     placeHolders
   );

@@ -9,6 +9,37 @@ export const buildColumnFilterWhereClause = (columnFilters: ColumnFilter[], plac
     return '';
   }
 
+   // Smart detection: Common JSONB column name patterns
+  const detectJsonbColumn = (columnName: string): boolean => {
+    const jsonbPatterns = [
+      // Exact matches for known JSONB columns
+      'business_owners',
+      'system_owners', 
+      'product_owners',
+      'product_managers',
+      'it_contacts'
+    ];
+
+    return jsonbPatterns.some(pattern => {
+      if (pattern.startsWith('_')) {
+        // Pattern match: column ends with this pattern
+        return columnName.endsWith(pattern);
+      } else {
+        // Exact match or contains pattern
+        return columnName === pattern || columnName.includes(pattern);
+      }
+    });
+  };
+  
+  // Helper function to build the appropriate column reference
+  const getColumnReference = (columnName: string): string => {
+    if (detectJsonbColumn(columnName)) {
+      // Cast JSONB to text for text-based operations
+      return `${columnName}::text`;
+    }
+    return columnName;
+  };
+
   // Optimized condition patterns mapping
   const buildConditionSQL = (condition: ColumnFilterCondition, columnName: string): string => {
     const { type, searchTags } = condition;
@@ -16,6 +47,8 @@ export const buildColumnFilterWhereClause = (columnFilters: ColumnFilter[], plac
     if (!searchTags || searchTags.length === 0) return '';
 
     const conditions: string[] = [];
+    const columnRef = getColumnReference(columnName);
+    const isJsonb = detectJsonbColumn(columnName);
 
     // Process each search tag
     searchTags.forEach(tag => {
@@ -26,40 +59,53 @@ export const buildColumnFilterWhereClause = (columnFilters: ColumnFilter[], plac
       switch (type) {
         case 'contains':
           placeHolders.push(`%${tag}%`);
-          sqlCondition = `${columnName} ILIKE $${placeHolders.length}`;
+          sqlCondition = `${columnRef} ILIKE $${placeHolders.length}`;
           break;
         
         case 'does_not_contain':
           placeHolders.push(`%${tag}%`);
-          sqlCondition = `${columnName} NOT ILIKE $${placeHolders.length}`;
+          sqlCondition = `${columnRef} NOT ILIKE $${placeHolders.length}`;
           break;
         
         case 'equals':
           placeHolders.push(tag);
-          sqlCondition = `${columnName} = $${placeHolders.length}`;
+          if (isJsonb) {
+            // For JSONB, use ILIKE for flexible matching
+            placeHolders[placeHolders.length - 1] = `%${tag}%`;
+            sqlCondition = `${columnRef} ILIKE $${placeHolders.length}`;
+          } else {
+            sqlCondition = `${columnRef} = $${placeHolders.length}`;
+          }
           break;
         
         case 'does_not_equal':
           placeHolders.push(tag);
-          sqlCondition = `${columnName} != $${placeHolders.length}`;
+          if (isJsonb) {
+            placeHolders[placeHolders.length - 1] = `%${tag}%`;
+            sqlCondition = `${columnRef} NOT ILIKE $${placeHolders.length}`;
+          } else {
+            sqlCondition = `${columnRef} != $${placeHolders.length}`;
+          }
           break;
         
         case 'begins_with':
           placeHolders.push(`${tag}%`);
-          sqlCondition = `${columnName} ILIKE $${placeHolders.length}`;
+          sqlCondition = `${columnRef} ILIKE $${placeHolders.length}`;
           break;
         
         case 'ends_with':
           placeHolders.push(`%${tag}`);
-          sqlCondition = `${columnName} ILIKE $${placeHolders.length}`;
+          sqlCondition = `${columnRef} ILIKE $${placeHolders.length}`;
           break;
         
         case 'is_blank':
-          sqlCondition = `(${columnName} IS NULL OR ${columnName} = '')`;
+          // For JSONB arrays, check if empty array or null
+          sqlCondition = isJsonb ? `(${columnName} IS NULL OR ${columnName} = '[]'::jsonb OR jsonb_array_length(${columnName}) = 0)` : `(${columnName} IS NULL OR ${columnName} = '')`;
           break;
         
         case 'is_not_blank':
-          sqlCondition = `(${columnName} IS NOT NULL AND ${columnName} != '')`;
+          // For JSONB arrays, check if has elements
+          sqlCondition = isJsonb ? `(${columnName} IS NOT NULL AND ${columnName} != '[]'::jsonb AND jsonb_array_length(${columnName}) > 0)` : `(${columnName} IS NOT NULL AND ${columnName} != '')`;
           break;
         
         default:

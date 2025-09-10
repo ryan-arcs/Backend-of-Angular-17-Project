@@ -10,6 +10,7 @@ export const getUsers = async (params: ListQueryParams): Promise<{ data: User[];
       'first_name',
       'last_name',
       'email',
+      'full_name',
       'worker_id',
       'network_id',
       'empl_status',

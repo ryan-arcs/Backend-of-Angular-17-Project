@@ -12,6 +12,7 @@ import departmentRoutes from './asher/departments.routes';
 import vendorRoutes from './asher/vendors.routes';
 import lifecycleRoutes from './asher/lifecycles.routes';
 import asherUserRoutes from './asher/users.routes';
+import asherApplicationRoutes from './asher/applications.routes';
 
 // Register all route modules
 const registerRoutes = (app: Application): void => {
@@ -27,6 +28,7 @@ const registerRoutes = (app: Application): void => {
   app.use('/asher/vendors', vendorRoutes);
   app.use('/asher/lifecycles', lifecycleRoutes);
   app.use('/asher/users', asherUserRoutes);
+  app.use('/asher/applications', asherApplicationRoutes);
   app.use('/', loginRoutes);
 };
 
