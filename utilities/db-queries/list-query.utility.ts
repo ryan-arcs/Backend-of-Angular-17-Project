@@ -16,6 +16,7 @@ interface PaginateOptions {
   skipLimit?: boolean;
   applicationSlug?: string;
   columnFilters?: ColumnFilter[];
+  globalColumnFilterOperator?: string;
 }
 
 export const listQuery = async ({
@@ -31,7 +32,8 @@ export const listQuery = async ({
   moduleId,
   submoduleId,
   skipLimit,
-  applicationSlug
+  applicationSlug,
+  globalColumnFilterOperator
 }: PaginateOptions): Promise<{ data: any; totalCount: number }> => {
   const offset = pageIndex * pageSize;
   const placeHolders: any[] = [];
@@ -48,7 +50,7 @@ export const listQuery = async ({
 
   // Column filters condition
   if (columnFilters && columnFilters.length > 0) {
-    const columnFilterSQL = buildColumnFilterWhereClause(columnFilters, placeHolders);
+    const columnFilterSQL = buildColumnFilterWhereClause(columnFilters, placeHolders, globalColumnFilterOperator);
     if (columnFilterSQL) {
       whereConditions.push(columnFilterSQL);
     }

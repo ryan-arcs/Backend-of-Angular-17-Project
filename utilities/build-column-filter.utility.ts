@@ -4,7 +4,7 @@ import { ColumnFilter, ColumnFilterCondition } from "../interfaces";
  * Single optimized function to build column filters SQL
  * Handles all filter types and conditions in one place
  */
-export const buildColumnFilterWhereClause = (columnFilters: ColumnFilter[], placeHolders: any[]): string => {
+export const buildColumnFilterWhereClause = (columnFilters: ColumnFilter[], placeHolders: any[], globalColumnFilterOperator?: string): string => {
   if (!columnFilters || columnFilters.length === 0) {
     return '';
   }
@@ -149,5 +149,7 @@ export const buildColumnFilterWhereClause = (columnFilters: ColumnFilter[], plac
     }
   });
 
-  return filterConditions.length > 0 ? `(${filterConditions.join(' AND ')})` : '';
+  const globalOperator = (globalColumnFilterOperator || 'AND').toUpperCase();
+
+  return filterConditions.length > 0 ? `(${filterConditions.join(` ${globalOperator} `)})` : '';
 };

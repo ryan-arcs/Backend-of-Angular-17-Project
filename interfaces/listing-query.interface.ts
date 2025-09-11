@@ -12,6 +12,7 @@ export interface ListQueryParams {
     skipLimit?: boolean;
     applicationSlug?: string;
     columnFilters?: ColumnFilter[];
+    globalColumnFilterOperator?: string;
   }
    
   export interface GetListQueryParamsOptions {
